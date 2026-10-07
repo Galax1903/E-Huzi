@@ -88,6 +88,8 @@ footer h5{margin:0 0 8px;font-size:1rem}
 footer a{display:block;color:inherit;opacity:.75;text-decoration:none;font-size:.9rem;margin:3px 0}
 footer .c{opacity:.6;font-size:.8rem;margin-top:20px}
 [data-d]{cursor:pointer}
+.p .img img{max-width:100%;max-height:100%;object-fit:contain;padding:8px}
+.dimg img{max-width:100%;max-height:260px;object-fit:contain;padding:8px}
 .hbtn.ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
 .modal{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(0,0,0,.55);padding:16px}
 .modal.open{display:grid}
@@ -198,8 +200,8 @@ footer .c{opacity:.6;font-size:.8rem;margin-top:20px}
 
 <script>
 const P=[
-{id:1,n:"Galaxy S25 256 GB",b:"Samsung",c:"Telefon",e:"📱",p:42999,o:47999,r:4.7,bg:"#dbe7ff"},
-{id:2,n:"iPhone 16 128 GB",b:"Apple",c:"Telefon",e:"📱",p:54999,o:0,r:4.8,bg:"#e9e4ff"},
+{id:1,n:"Galaxy S25 256 GB",b:"Samsung",c:"Telefon",e:"📱",p:42999,o:47999,r:4.7,bg:"#dbe7ff",img:"img/s25.jpg"},
+{id:2,n:"iPhone 16 128 GB",b:"Apple",c:"Telefon",e:"📱",p:54999,o:0,r:4.8,bg:"#e9e4ff",img:"img/16.png"},
 {id:3,n:"Redmi Note 14 Pro",b:"Xiaomi",c:"Telefon",e:"📱",p:13499,o:15499,r:4.5,bg:"#ffe7d6"},
 {id:4,n:"ProBook 15 i7 16 GB",b:"Asus",c:"Bilgisayar",e:"💻",p:38999,o:0,r:4.6,bg:"#d9f3ea"},
 {id:5,n:"MacBook Air M3",b:"Apple",c:"Bilgisayar",e:"💻",p:52999,o:56999,r:4.9,bg:"#e8ecef"},
@@ -213,8 +215,10 @@ const P=[
 {id:13,n:"Kablosuz Mouse",b:"Logitech",c:"Aksesuar",e:"🖱️",p:899,o:1099,r:4.6,bg:"#e3f6df"},
 {id:14,n:"Taşınabilir Hoparlör",b:"JBL",c:"Ses",e:"🔊",p:2899,o:3499,r:4.5,bg:"#ffe1cf"},
 {id:15,n:"20.000 mAh Powerbank",b:"Anker",c:"Aksesuar",e:"🔋",p:1299,o:0,r:4.4,bg:"#e8f4d6"},
-{id:16,n:"Güvenlik Kamerası 2K",b:"Xiaomi",c:"Akıllı Ev",e:"📷",p:1499,o:1899,r:4.2,bg:"#dceaf0"}
+{id:16,n:"Güvenlik Kamerası 2K",b:"Xiaomi",c:"Akıllı Ev",e:"📷",p:1499,o:1899,r:4.2,bg:"#dceaf0"},
+{id:17,n:"iPhone 14 Pro 128 GB",b:"Apple",c:"Telefon",e:"📱",p:44999,o:0,r:4.7,bg:"#ece6ff",img:"img/14 pro.jfif"}
 ];
+const pic=x=>x.img?`<img src="${encodeURI(x.img)}" alt="${esc(x.n)}" loading="lazy" onerror="this.replaceWith(document.createTextNode('${x.e}'))">`:`<span aria-hidden="true">${x.e}</span>`;
 const $=s=>document.querySelector(s);
 const tl=n=>n.toLocaleString("tr-TR")+" TL";
 const cats=["Tümü",...new Set(P.map(x=>x.c))];
@@ -239,7 +243,7 @@ function render(){
  $("#found").textContent=l.length+" ürün";
  $("#grid").innerHTML=l.length?l.map(x=>`<article class="p">
  <div class="img" data-d="${x.id}" style="background:${x.bg}">${x.o?`<span class="off">%${Math.round((1-x.p/x.o)*100)} indirim</span>`:""}
- <button class="fav" data-f="${x.id}" aria-label="Favorilere ekle" aria-pressed="${favs.has(x.id)}">${favs.has(x.id)?"♥":"♡"}</button><span aria-hidden="true">${x.e}</span></div>
+ <button class="fav" data-f="${x.id}" aria-label="Favorilere ekle" aria-pressed="${favs.has(x.id)}">${favs.has(x.id)?"♥":"♡"}</button>${pic(x)}</div>
  <div class="b"><span class="br">${x.b} · ${x.c}</span><h4 data-d="${x.id}" tabindex="0">${x.n}</h4><span class="st">★ ${x.r.toFixed(1)}</span>
  <span class="old">${x.o?tl(x.o):"&nbsp;"}</span><span class="pr">${tl(x.p)}</span>
  <button class="add" data-a="${x.id}">Sepete ekle</button></div></article>`).join(""):`<div class="empty">Aramanla eşleşen ürün yok. Filtreleri değiştirip tekrar dene.</div>`;
@@ -281,7 +285,7 @@ $("#mbody").onclick=e=>{const b=e.target.closest("button");if(!b)return;
  if(b.id==="lo"){user=null;try{localStorage.removeItem("vuser")}catch(x){}hdr();mc();toast("Çıkış yapıldı")}};
 function hdr(){$("#openAuth").textContent=user?"Merhaba, "+user.name.split(" ")[0]:"Giriş yap"}
 function detail(id){const x=P.find(y=>y.id==id);
- mo(`<div class="dt"><div class="dimg" style="background:${x.bg}">${x.e}</div><div><span class="br">${x.b} · ${x.c}</span><h3>${x.n}</h3><div class="st">★ ${x.r.toFixed(1)} · Stokta var</div>${x.o?`<div class="old">${tl(x.o)}</div>`:""}<div class="pr">${tl(x.p)}</div><table>${(SP[x.c]||[]).map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join("")}<tr><th>Garanti</th><td>2 yıl</td></tr><tr><th>Kargo</th><td>1–3 iş günü</td></tr></table><button class="cta" data-a2="${x.id}">Sepete ekle</button></div></div>`)}
+ mo(`<div class="dt"><div class="dimg" style="background:${x.bg}">${pic(x)}</div><div><span class="br">${x.b} · ${x.c}</span><h3>${x.n}</h3><div class="st">★ ${x.r.toFixed(1)} · Stokta var</div>${x.o?`<div class="old">${tl(x.o)}</div>`:""}<div class="pr">${tl(x.p)}</div><table>${(SP[x.c]||[]).map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join("")}<tr><th>Garanti</th><td>2 yıl</td></tr><tr><th>Kargo</th><td>1–3 iş günü</td></tr></table><button class="cta" data-a2="${x.id}">Sepete ekle</button></div></div>`)}
 function authView(t){
  mo(`<div class="tabs"><button data-t="l" aria-pressed="${t==="l"}">Giriş yap</button><button data-t="r" aria-pressed="${t==="r"}">Üye ol</button></div><form class="f" id="af">${t==="r"?`<label>Ad soyad<input name="n" required autocomplete="name"></label>`:""}<label>E-posta<input name="e" type="email" required autocomplete="email"></label><label>Şifre (en az 6 karakter)<input name="p" type="password" minlength="6" required autocomplete="current-password"></label><button class="cta" style="width:100%;margin-top:14px">${t==="r"?"Üye ol":"Giriş yap"}</button><p class="br">Demo: şifre hiçbir yere kaydedilmez.</p></form>`);
  $("#af").onsubmit=ev=>{ev.preventDefault();const f=new FormData(ev.target),m=f.get("e");user={name:f.get("n")||m.split("@")[0],email:m};save();hdr();mc();toast("Hoş geldin, "+user.name)}}
