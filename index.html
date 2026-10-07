@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Voltaj – Elektronik Mağazası</title>
+<title>E-Huzi – Elektronik Mağazası</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#eef1f4;--card:#fff;--ink:#12202b;--mut:#5d6b78;--line:#d6dce2;--acc:#1f5eff;--acc-ink:#fff;--tag:#ffd60a;--tag-ink:#12202b;--ok:#0c8a4f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -87,6 +87,30 @@ footer{background:var(--ink);color:var(--bg);margin-top:48px;padding:32px 0 20px
 footer h5{margin:0 0 8px;font-size:1rem}
 footer a{display:block;color:inherit;opacity:.75;text-decoration:none;font-size:.9rem;margin:3px 0}
 footer .c{opacity:.6;font-size:.8rem;margin-top:20px}
+[data-d]{cursor:pointer}
+.hbtn.ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.modal{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(0,0,0,.55);padding:16px}
+.modal.open{display:grid}
+.mb{background:var(--card);border-radius:16px;width:min(640px,100%);max-height:90vh;overflow:auto;padding:22px;position:relative}
+.mb .x{position:absolute;top:8px;right:12px;background:none;border:0;font-size:1.8rem}
+.mb h3{margin:0 0 10px;font-size:1.4rem}
+.dt{display:grid;grid-template-columns:1fr 1.2fr;gap:20px}
+.dimg{display:grid;place-items:center;font-size:6rem;border-radius:14px;min-height:200px}
+.dt .old{text-decoration:line-through;color:var(--mut)}
+.dt .pr{font-size:1.8rem;font-weight:800}
+.dt table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
+.dt th{text-align:left;color:var(--mut);font-weight:400;padding:5px 0;border-bottom:1px solid var(--line)}
+.dt td{padding:5px 0;border-bottom:1px solid var(--line);text-align:right}
+.tabs{display:flex;gap:8px;margin-bottom:8px}
+.tabs button{flex:1;padding:9px;border:1px solid var(--line);background:var(--bg);border-radius:8px}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.f label{display:block;font-size:.85rem;margin:10px 0 4px;color:var(--mut)}
+.f input{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sum{display:grid;grid-template-columns:1fr auto;gap:4px;margin:16px 0;padding:12px;background:var(--bg);border-radius:10px}
+.sum span:nth-child(even),.sum b:nth-child(even){text-align:right}
+.toast{z-index:70}
+@media (max-width:560px){.dt,.row2{grid-template-columns:1fr}}
 @media (max-width:860px){.hero{grid-template-columns:1fr}.perks{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}aside{position:static}.fg{grid-template-columns:1fr 1fr}.hrow{flex-wrap:wrap}.search{order:3;flex-basis:100%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -96,8 +120,9 @@ footer .c{opacity:.6;font-size:.8rem;margin-top:20px}
 <header>
 <div class="wrap">
 <div class="hrow">
-<a class="logo" href="#"><b>Volt</b>aj</a>
+<a class="logo" href="#"><b>E-</b>Huzi</a>
 <div class="search"><input id="q" type="search" placeholder="Ürün, marka veya kategori ara" aria-label="Ürün ara"></div>
+<button class="hbtn ghost" id="openAuth">Giriş yap</button>
 <button class="hbtn" id="openCart" aria-label="Sepeti aç">Sepet <span class="n" id="cnt">0</span></button>
 </div>
 <nav class="cats" id="cats" aria-label="Kategoriler"></nav>
@@ -148,12 +173,12 @@ footer .c{opacity:.6;font-size:.8rem;margin-top:20px}
 <footer>
 <div class="wrap">
 <div class="fg">
-<div><h5>Voltaj</h5><a>Elektronik ürünlerde güvenilir alışveriş. Bu sayfa bir demo mağazadır.</a></div>
+<div><h5>E-Huzi</h5><a>Elektronik ürünlerde güvenilir alışveriş. Bu sayfa bir demo mağazadır.</a></div>
 <div><h5>Alışveriş</h5><a href="#">Kampanyalar</a><a href="#">Taksit seçenekleri</a><a href="#">Sipariş takibi</a></div>
 <div><h5>Destek</h5><a href="#">İade ve değişim</a><a href="#">Teslimat bilgileri</a><a href="#">Sıkça sorulan sorular</a></div>
 <div><h5>Kurumsal</h5><a href="#">Hakkımızda</a><a href="#">Mağazalar</a><a href="#">İletişim</a></div>
 </div>
-<div class="c">© 2026 Voltaj. Tüm hakları saklıdır.</div>
+<div class="c">© 2026 E-Huzi. Tüm hakları saklıdır.</div>
 </div>
 </footer>
 
@@ -168,6 +193,7 @@ footer .c{opacity:.6;font-size:.8rem;margin-top:20px}
 <button class="cta" id="buy">Siparişi tamamla</button>
 </div>
 </aside>
+<div class="modal" id="modal"><div class="mb" role="dialog" aria-modal="true"><button class="x" id="mx" aria-label="Kapat">×</button><div id="mbody"></div></div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -192,9 +218,9 @@ const P=[
 const $=s=>document.querySelector(s);
 const tl=n=>n.toLocaleString("tr-TR")+" TL";
 const cats=["Tümü",...new Set(P.map(x=>x.c))];
-let cat="Tümü",cart={},favs=new Set();
-try{cart=JSON.parse(localStorage.getItem("vcart")||"{}");favs=new Set(JSON.parse(localStorage.getItem("vfav")||"[]"))}catch(e){}
-const save=()=>{try{localStorage.setItem("vcart",JSON.stringify(cart));localStorage.setItem("vfav",JSON.stringify([...favs]))}catch(e){}};
+let cat="Tümü",cart={},favs=new Set(),user=null;
+try{cart=JSON.parse(localStorage.getItem("vcart")||"{}");favs=new Set(JSON.parse(localStorage.getItem("vfav")||"[]"));user=JSON.parse(localStorage.getItem("vuser"))}catch(e){}
+const save=()=>{try{localStorage.setItem("vcart",JSON.stringify(cart));localStorage.setItem("vfav",JSON.stringify([...favs]));localStorage.setItem("vuser",JSON.stringify(user))}catch(e){}};
 
 $("#cats").innerHTML=cats.map(c=>`<button aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
 $("#cats").onclick=e=>{const b=e.target.closest("button");if(!b)return;cat=b.dataset.c;
@@ -212,17 +238,18 @@ function render(){
  $("#title").textContent=cat==="Tümü"?"Tüm ürünler":cat;
  $("#found").textContent=l.length+" ürün";
  $("#grid").innerHTML=l.length?l.map(x=>`<article class="p">
- <div class="img" style="background:${x.bg}">${x.o?`<span class="off">%${Math.round((1-x.p/x.o)*100)} indirim</span>`:""}
+ <div class="img" data-d="${x.id}" style="background:${x.bg}">${x.o?`<span class="off">%${Math.round((1-x.p/x.o)*100)} indirim</span>`:""}
  <button class="fav" data-f="${x.id}" aria-label="Favorilere ekle" aria-pressed="${favs.has(x.id)}">${favs.has(x.id)?"♥":"♡"}</button><span aria-hidden="true">${x.e}</span></div>
- <div class="b"><span class="br">${x.b} · ${x.c}</span><h4>${x.n}</h4><span class="st">★ ${x.r.toFixed(1)}</span>
+ <div class="b"><span class="br">${x.b} · ${x.c}</span><h4 data-d="${x.id}" tabindex="0">${x.n}</h4><span class="st">★ ${x.r.toFixed(1)}</span>
  <span class="old">${x.o?tl(x.o):"&nbsp;"}</span><span class="pr">${tl(x.p)}</span>
  <button class="add" data-a="${x.id}">Sepete ekle</button></div></article>`).join(""):`<div class="empty">Aramanla eşleşen ürün yok. Filtreleri değiştirip tekrar dene.</div>`;
 }
 $("#grid").onclick=e=>{
- const a=e.target.closest("[data-a]"),f=e.target.closest("[data-f]");
+ const a=e.target.closest("[data-a]"),f=e.target.closest("[data-f]"),d=e.target.closest("[data-d]");
  if(a){const id=a.dataset.a;cart[id]=(cart[id]||0)+1;save();drawCart();toast("Sepete eklendi")}
- if(f){const id=+f.dataset.f;favs.has(id)?favs.delete(id):favs.add(id);save();render()}
+ if(f){const id=+f.dataset.f;favs.has(id)?favs.delete(id):favs.add(id);save();render()}else if(d)detail(d.dataset.d)
 };
+$("#grid").onkeydown=e=>{if(e.key==="Enter"&&e.target.dataset.d)detail(e.target.dataset.d)};
 function drawCart(){
  const ids=Object.keys(cart);let t=0,n=0;
  $("#items").innerHTML=ids.length?ids.map(id=>{const x=P.find(y=>y.id==id),q=cart[id];t+=x.p*q;n+=q;
@@ -237,10 +264,41 @@ $("#items").onclick=e=>{const b=e.target.closest("button");if(!b)return;const d=
  if(d.pl)cart[d.pl]++;if(d.m&&--cart[d.m]<=0)delete cart[d.m];if(d.r)delete cart[d.r];save();drawCart()};
 const open=v=>{$("#drawer").classList.toggle("open",v);$("#scrim").classList.toggle("open",v)};
 $("#openCart").onclick=()=>open(true);$("#closeCart").onclick=$("#scrim").onclick=()=>open(false);
-$("#buy").onclick=()=>{cart={};save();drawCart();open(false);toast("Siparişin alındı. Teşekkürler!")};
-document.addEventListener("keydown",e=>{if(e.key==="Escape")open(false)});
+$("#buy").onclick=()=>checkout();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){open(false);mc()}});
 let tm;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tm);tm=setTimeout(()=>t.classList.remove("show"),1800)}
-render();drawCart();
+
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SP={Telefon:[["Ekran","6,7\" AMOLED"],["Depolama","128–256 GB"],["Kamera","50 MP"]],Bilgisayar:[["Ekran","14–15,6\""],["Bellek","16 GB"],["Depolama","512 GB SSD"]],Tablet:[["Ekran","11\" 120 Hz"],["Depolama","256 GB"],["Pil","10.000 mAh"]],"Kulaklık":[["Bağlantı","Bluetooth 5.3"],["Pil","30 saate kadar"],["Özellik","Aktif gürültü engelleme"]],"Akıllı Saat":[["Ekran","1,6\" AMOLED"],["Pil","14 güne kadar"],["Dayanıklılık","5 ATM"]],Televizyon:[["Çözünürlük","4K UHD"],["Yenileme","120 Hz"],["Bağlantı","Wi-Fi, HDMI 2.1"]],Oyun:[["Depolama","1 TB"],["Çözünürlük","4K"],["Kol","1 adet dahil"]],Aksesuar:[["Bağlantı","USB / Bluetooth"],["Uyumluluk","Windows, macOS"],["Kutu içeriği","Kablo ve kılavuz"]],Ses:[["Pil","12 saat"],["Koruma","IP67"],["Bağlantı","Bluetooth 5.3"]],"Akıllı Ev":[["Çözünürlük","2K"],["Bağlantı","Wi-Fi"],["Özellik","Gece görüşü"]]};
+const mo=h=>{$("#mbody").innerHTML=h;$("#modal").classList.add("open")};
+const mc=()=>$("#modal").classList.remove("open");
+$("#mx").onclick=mc;
+$("#modal").onclick=e=>{if(e.target.id==="modal")mc()};
+$("#mbody").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+ if(b.dataset.a2){cart[b.dataset.a2]=(cart[b.dataset.a2]||0)+1;save();drawCart();mc();toast("Sepete eklendi")}
+ if(b.dataset.t)authView(b.dataset.t);
+ if(b.id==="ok")mc();
+ if(b.id==="lo"){user=null;try{localStorage.removeItem("vuser")}catch(x){}hdr();mc();toast("Çıkış yapıldı")}};
+function hdr(){$("#openAuth").textContent=user?"Merhaba, "+user.name.split(" ")[0]:"Giriş yap"}
+function detail(id){const x=P.find(y=>y.id==id);
+ mo(`<div class="dt"><div class="dimg" style="background:${x.bg}">${x.e}</div><div><span class="br">${x.b} · ${x.c}</span><h3>${x.n}</h3><div class="st">★ ${x.r.toFixed(1)} · Stokta var</div>${x.o?`<div class="old">${tl(x.o)}</div>`:""}<div class="pr">${tl(x.p)}</div><table>${(SP[x.c]||[]).map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join("")}<tr><th>Garanti</th><td>2 yıl</td></tr><tr><th>Kargo</th><td>1–3 iş günü</td></tr></table><button class="cta" data-a2="${x.id}">Sepete ekle</button></div></div>`)}
+function authView(t){
+ mo(`<div class="tabs"><button data-t="l" aria-pressed="${t==="l"}">Giriş yap</button><button data-t="r" aria-pressed="${t==="r"}">Üye ol</button></div><form class="f" id="af">${t==="r"?`<label>Ad soyad<input name="n" required autocomplete="name"></label>`:""}<label>E-posta<input name="e" type="email" required autocomplete="email"></label><label>Şifre (en az 6 karakter)<input name="p" type="password" minlength="6" required autocomplete="current-password"></label><button class="cta" style="width:100%;margin-top:14px">${t==="r"?"Üye ol":"Giriş yap"}</button><p class="br">Demo: şifre hiçbir yere kaydedilmez.</p></form>`);
+ $("#af").onsubmit=ev=>{ev.preventDefault();const f=new FormData(ev.target),m=f.get("e");user={name:f.get("n")||m.split("@")[0],email:m};save();hdr();mc();toast("Hoş geldin, "+user.name)}}
+$("#openAuth").onclick=()=>{if(!user)return authView("l");
+ mo(`<h3>Hesabım</h3><p><b>${esc(user.name)}</b><br><span class="br">${esc(user.email)}</span></p><p>Favori ürün: ${favs.size} · Sepetteki ürün: ${Object.values(cart).reduce((a,b)=>a+b,0)}</p><button class="cta" id="lo">Çıkış yap</button>`)};
+function checkout(){const ids=Object.keys(cart);if(!ids.length)return;
+ let t=0;ids.forEach(i=>t+=P.find(y=>y.id==i).p*cart[i]);const sh=t>=2500?0:99,g=t+sh;open(false);
+ mo(`<h3>Ödeme</h3><form class="f" id="cf"><div class="row2"><label>Ad soyad<input name="n" required value="${user?esc(user.name):""}"></label><label>Telefon<input name="t" type="tel" required inputmode="tel" placeholder="05xx xxx xx xx"></label></div><label>Adres<input name="a" required></label><div class="row2"><label>Şehir<input name="s" required></label><label>Posta kodu<input name="z" inputmode="numeric" required></label></div><label>Kart numarası<input id="cn" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" required></label><div class="row2"><label>Son kullanma<input id="ce" maxlength="5" placeholder="AA/YY" required></label><label>CVC<input id="cv" inputmode="numeric" maxlength="3" required></label></div><div class="sum"><span>Ürünler</span><span>${tl(t)}</span><span>Kargo</span><span>${sh?tl(sh):"Ücretsiz"}</span><b>Toplam</b><b>${tl(g)}</b></div><button class="cta" style="width:100%">${tl(g)} öde</button><p class="br">Demo: kart bilgisi hiçbir yere gönderilmez veya kaydedilmez.</p></form>`);
+ $("#cn").oninput=e=>e.target.value=e.target.value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim();
+ $("#ce").oninput=e=>{let v=e.target.value.replace(/\D/g,"").slice(0,4);e.target.value=v.length>2?v.slice(0,2)+"/"+v.slice(2):v};
+ $("#cf").onsubmit=ev=>{ev.preventDefault();
+  if($("#cn").value.replace(/\D/g,"").length!==16)return toast("Kart numarası 16 haneli olmalı");
+  if(!/^(0[1-9]|1[0-2])\/\d\d$/.test($("#ce").value))return toast("Son kullanma tarihi AA/YY biçiminde olmalı");
+  if($("#cv").value.length!==3)return toast("CVC 3 haneli olmalı");
+  const no=Math.floor(100000+Math.random()*900000);cart={};save();drawCart();
+  mo(`<h3>Siparişin alındı</h3><p>Sipariş numaran: <b>EH-${no}</b></p><p class="br">Toplam ${tl(g)} · 1–3 iş gününde kargoda.</p><button class="cta" id="ok">Alışverişe devam et</button>`)}}
+render();drawCart();hdr();
 </script>
 </body>
 </html>
